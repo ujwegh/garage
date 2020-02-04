@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: Garage
+  datasource:
+    url: jdbc:postgresql://localhost:5432/garage
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+  boot:
+    admin:
+      client:
+        #login to admin-server:
+        url: http://localhost:8080
+        username: admin
+        password: admin123
+        #login to client:
+        instance:
+          metadata:
+            user:
+              name: admin
+              password: admin123
+  #временный пользователь - пока так
+  security:
+    user:
+      name: admin
+      password: admin123
+
+
+logging.level.org.springframework.security: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
