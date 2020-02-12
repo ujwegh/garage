@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ru.ilnik.garage.model.User;
 import ru.ilnik.garage.repository.UserRepository;
+import ru.ilnik.garage.security.AuthorizedUser;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -23,12 +24,12 @@ import static ru.ilnik.garage.util.ValidationUtil.checkNotFoundWithId;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
     private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository repository) {
         this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
+//        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -76,20 +77,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        /*log.info("load user by user email {}", email);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.info("load user by user email {}", email);
         User user = repository.findByEmail(email.toLowerCase());
         if (user == null) {
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
-        return new AuthorizedUser(user);*/
-        return null;
+        return new AuthorizedUser(user);
     }
 
     private User prepareAndSave(User user) {
         log.info("prepare and save {}", user);
         String password = user.getPassword();
-        user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
+//        user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
         user.setEmail(user.getEmail().toLowerCase());
         return repository.save(user);
     }

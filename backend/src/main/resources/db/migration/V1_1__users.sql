@@ -25,9 +25,9 @@ alter table user_roles
     add constraint user_roles_idx foreign key (user_id) references users on delete cascade;
 
 insert into users
-values (1, now(), null, null, 'admin@gmail.com', '{noop}password', 'admin', 'admin', 'MALE', '+7-777-888-9900', null, true),
-       (2, now(), null, null, 'user@gmail.com', '{noop}password', 'user', 'user', 'FEMALE', '+8-555-333-1234', null, true),
-       (3, now(), null, null, 'manager@gmail.com', '{noop}password', 'manager', 'manager', 'CUSTOM', '+8-800-555-3535', null, true);
+values (1, now(), null, null, 'admin@gmail.com', '$2y$12$qn9/9CJAoRefjK/wu6S.jOXp.EYNXnw0A3EYAVzUPwD6Iz7QBtz1m', 'admin', 'admin', 'MALE', '+7-777-888-9900', null, true),
+       (2, now(), null, null, 'user@gmail.com', '$2y$12$qn9/9CJAoRefjK/wu6S.jOXp.EYNXnw0A3EYAVzUPwD6Iz7QBtz1m', 'user', 'user', 'FEMALE', '+8-555-333-1234', null, true),
+       (3, now(), null, null, 'manager@gmail.com', '$2y$12$qn9/9CJAoRefjK/wu6S.jOXp.EYNXnw0A3EYAVzUPwD6Iz7QBtz1m', 'manager', 'manager', 'CUSTOM', '+8-800-555-3535', null, true);
 
 INSERT INTO USER_ROLES (role, user_id)
 VALUES ('ROLE_ADMIN', 1),

@@ -11,24 +11,32 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
-  boot:
-    admin:
-      client:
-        #login to admin-server:
-        url: http://localhost:8080
-        username: admin
-        password: admin123
-        #login to client:
-        instance:
-          metadata:
-            user:
-              name: admin
-              password: admin123
+#  boot:
+#    admin:
+#      client:
+#        #login to admin-server:
+#        url: http://localhost:8080
+#        username: admin
+#        password: admin123
+#        #login to client:
+#        instance:
+#          metadata:
+#            user:
+#              name: admin
+#              password: admin123
   #��������� ������������ - ���� ���
+#  security:
+#    user:
+#      name: admin
+#      password: admin123
+
   security:
-    user:
-      name: admin
-      password: admin123
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: <your client id>
+            client-secret: <your client secret>
 
 logging.level.org.springframework.security: INFO
 
@@ -47,3 +55,4 @@ graphiql:
   mapping: /graphiql
   endpoint: /graphql
   enabled: true
+

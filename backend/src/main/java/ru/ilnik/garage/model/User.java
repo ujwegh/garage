@@ -12,9 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Data
@@ -52,6 +50,8 @@ public class User extends BaseEntity {
     }
 
     public User(String email, String password) {
-
+        this.email = email;
+        this.password = password;
+        this.roles = new HashSet<>(Collections.singletonList(Role.ROLE_CLIENT));
     }
 }

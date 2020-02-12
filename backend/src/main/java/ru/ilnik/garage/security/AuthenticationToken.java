@@ -1,4 +1,4 @@
-package ru.ilnik.garage.model;
+package ru.ilnik.garage.security;
 
 import lombok.Getter;
 import lombok.Setter;
