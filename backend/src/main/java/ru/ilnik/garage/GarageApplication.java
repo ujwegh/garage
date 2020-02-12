@@ -12,4 +12,17 @@ public class GarageApplication {
         SpringApplication.run(GarageApplication.class, args);
     }
 
+//    @Bean
+//    GraphQLSchema schema() {
+//        return GraphQLSchema.newSchema()
+//                .query(GraphQLObjectType.newObject()
+//                        .name("query")
+//                        .field(field -> field
+//                                .name("test")
+//                                .type(Scalars.GraphQLString)
+//                                .dataFetcher(environment -> "response")
+//                        )
+//                        .build())
+//                .build();
+//    }
 }

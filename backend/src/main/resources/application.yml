@@ -24,12 +24,11 @@ spring:
             user:
               name: admin
               password: admin123
-  #временный пользователь - пока так
+  #пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
   security:
     user:
       name: admin
       password: admin123
-
 
 logging.level.org.springframework.security: INFO
 
@@ -38,3 +37,13 @@ management:
     web:
       exposure:
         include: '*'
+
+graphql:
+  servlet:
+    mapping: /graphql
+    enabled: true
+    corsEnabled: true
+graphiql:
+  mapping: /graphiql
+  endpoint: /graphql
+  enabled: true
