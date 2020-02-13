@@ -9,8 +9,6 @@ import ru.ilnik.garage.model.User;
 @Component
 public class JwtGenerator {
 //    public String generate(User user) {
-//
-//
 //        Claims claims = Jwts.claims().setSubject(user.getEmail());
 //        claims.put("password", String.valueOf(user.getPassword()));
 //        claims.put("roles", user.getRoles());

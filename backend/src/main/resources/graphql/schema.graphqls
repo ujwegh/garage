@@ -19,3 +19,19 @@ type Author {
     firstName: String
     lastName: String
 }
+
+type Gender{
+    name: String
+}
+
+type User {
+    id: ID
+    createdDate: String
+    updatedDate: String
+    lastLoginDate: String
+    email: String
+    firstName: String
+    lastName: String
+    gender: String
+    phone: String
+}

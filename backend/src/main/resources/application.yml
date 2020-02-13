@@ -34,9 +34,13 @@ spring:
     oauth2:
       client:
         registration:
+          github:
+            clientId: 54b4db2424dd2dc355de
+            clientSecret: a6f9376d695ebcf643af131782e8c21121999e09
           google:
-            client-id: <your client id>
-            client-secret: <your client secret>
+            client-id: google-client-id
+            client-secret: google-client-secret
+
 
 logging.level.org.springframework.security: INFO
 

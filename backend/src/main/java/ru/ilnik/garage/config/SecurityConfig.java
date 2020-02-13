@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -61,8 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        SavedRequestAwareAuthenticationSuccessHandler successHandler
-                = new SavedRequestAwareAuthenticationSuccessHandler();
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         successHandler.setTargetUrlParameter("redirectTo");
         successHandler.setDefaultTargetUrl("/");
 
@@ -76,43 +74,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/resources/**",
                         "/static/**",
                         "/vendor/**",
-                        "/fonts/**").permitAll()
-                .antMatchers( "/favicon.ico").permitAll()
-                .antMatchers("/assets/**").permitAll()
+                        "/fonts/**",
+                        "/assets/**").permitAll()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/graphql/**").permitAll() // временно разрешено
-                .antMatchers("/graphiql/**").permitAll() // временно разрешено
-                .anyRequest().authenticated().and()
-                .formLogin().loginPage("/login")
-                .successHandler(successHandler).and()
-                .logout().logoutUrl("/logout").and()
-                .httpBasic().and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                .anyRequest().authenticated()
+//                .and()
+//                .formLogin().loginPage("/login")
+//                .successHandler(successHandler)
+//                .and()
+//                .logout().logoutUrl("/logout")
+//                .and()
+//                .httpBasic()
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .oauth2Login()
-                .loginPage("/oauth_login");
-        ;
+                .successHandler(successHandler)
+                .and()
+                .httpBasic()
+                .and().csrf().disable();
+
     }
-
-//    @Bean
-//    public PasswordEncoder encoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    }
-//    @Override
-//    public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-//
-//        auth.userDetailsService(userServiceImpl)
-//                .passwordEncoder(encoder())
-//                .and()
-//                .authenticationProvider(authenticationProvider());
-//    }
-//
-//    @Bean
-//    public DaoAuthenticationProvider authenticationProvider() {
-//        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//        authProvider.setUserDetailsService(userService);
-//        authProvider.setPasswordEncoder(encoder());
-//        return authProvider;
-//    }
-
 }
