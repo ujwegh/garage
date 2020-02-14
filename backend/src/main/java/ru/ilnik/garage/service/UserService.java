@@ -13,4 +13,5 @@ public interface UserService {
 //    void update(UserTo userTo);
     void update(User user);
     void enable(long id, boolean enabled);
+    boolean isExist(String email);
 }

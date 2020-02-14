@@ -2,6 +2,7 @@ package ru.ilnik.garage.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,12 +25,12 @@ import static ru.ilnik.garage.util.ValidationUtil.checkNotFoundWithId;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
     private final UserRepository repository;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository, @Lazy PasswordEncoder passwordEncoder) {
         this.repository = repository;
-//        this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -77,6 +78,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public boolean isExist(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.info("load user by user email {}", email);
         User user = repository.findByEmail(email.toLowerCase());
@@ -89,8 +95,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private User prepareAndSave(User user) {
         log.info("prepare and save {}", user);
         String password = user.getPassword();
-//        user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
+        user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
         user.setEmail(user.getEmail().toLowerCase());
         return repository.save(user);
     }
+
+
 }

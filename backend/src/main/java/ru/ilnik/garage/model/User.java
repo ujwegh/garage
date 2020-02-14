@@ -28,6 +28,7 @@ public class User extends BaseEntity {
     private String password;
 
     private String firstName;
+
     private String lastName;
 
     @Enumerated(EnumType.STRING)
@@ -42,16 +43,20 @@ public class User extends BaseEntity {
     private Set<Role> roles;
 
     private String imageUuid;
+
     private boolean enabled = true;
+
     private LocalDateTime lastLoginDate;
+
+    private String oauthClientId;
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-    public User(String email, String password) {
+    public User(String email, String password, Role role) {
         this.email = email;
         this.password = password;
-        this.roles = new HashSet<>(Collections.singletonList(Role.ROLE_CLIENT));
+        this.roles = new HashSet<>(Collections.singletonList(role));
     }
 }
