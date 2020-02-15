@@ -37,7 +37,7 @@ public class CustomOidcUserService extends OidcUserService {
             user.setLastName(oidcUser.getFamilyName());
             user.setLastLoginDate(LocalDateTime.now());
             user.setPhone(oidcUser.getPhoneNumber());
-            userService.update(user);
+            userService.create(user);
         }
         return oidcUser;
     }

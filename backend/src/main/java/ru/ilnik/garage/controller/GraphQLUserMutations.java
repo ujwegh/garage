@@ -5,12 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.ilnik.garage.model.User;
-import ru.ilnik.garage.model.enums.Role;
 import ru.ilnik.garage.service.UserService;
 import ru.ilnik.garage.util.UserValidator;
 
@@ -18,25 +14,17 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class GraphQLUserController implements GraphQLMutationResolver {
+public class GraphQLUserMutations implements GraphQLMutationResolver {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final UserValidator userValidator;
 
     @Autowired
-    public GraphQLUserController(UserService userService, AuthenticationManager authenticationManager, UserValidator userValidator) {
+    public GraphQLUserMutations(UserService userService, AuthenticationManager authenticationManager, UserValidator userValidator) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.userValidator = userValidator;
-    }
-
-
-
-    @Secured("ROLE_ADMIN")
-    public List<User> users() {
-        log.info("Get all users");
-        return userService.getAll();
     }
 
     @Secured({"ROLE_ADMIN, ROLE_USER", "ROLE_CLIENT", "ROLE_MANAGER"})
@@ -47,7 +35,14 @@ public class GraphQLUserController implements GraphQLMutationResolver {
 
     @Secured("ROLE_ADMIN")
     public void enableUser(Long id, Boolean enable) {
+        log.info(enable ? "enable user with id: {}" : "disable user with id: {}", id);
         userService.enable(id, enable);
+    }
+
+    @Secured("ROLE_ADMIN")
+    public void delete(Long id) {
+        log.info("Delete user with id: {}", id);
+        userService.delete(id);
     }
 
 }

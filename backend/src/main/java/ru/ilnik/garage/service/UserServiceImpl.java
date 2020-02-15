@@ -14,6 +14,7 @@ import ru.ilnik.garage.model.User;
 import ru.ilnik.garage.repository.UserRepository;
 import ru.ilnik.garage.security.AuthorizedUser;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -41,37 +42,37 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void delete(long id) {
-        log.info("Delete user by id {}", id);
+        log.debug("Delete user by id {}", id);
         repository.deleteById(id);
     }
 
     @Override
     public User get(long id) {
-        log.info("get user by id {}", id);
+        log.debug("get user by id {}", id);
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
     @Override
     public User getByEmail(@NotNull String email) {
-        log.info("Get user by email {}", email);
+        log.debug("Get user by email {}", email);
         return checkNotFound(repository.findByEmail(email), "email=" + email);
     }
 
     @Override
     public List<User> getAll() {
-        log.info("Get all users");
+        log.debug("Get all users");
         return repository.findAll(SORT_NAME_EMAIL);
     }
 
     @Override
     public void update(@NotNull User user) {
-        log.info("update user by user {}", user);
+        log.debug("update user by user {}", user);
         prepareAndSave(user);
     }
 
     @Override
     public void enable(long id, boolean enabled) {
-        log.info(enabled ? "enable {}" : "disable {}", id);
+        log.debug(enabled ? "enable {}" : "disable {}", id);
         User user = get(id);
         user.setEnabled(enabled);
         repository.save(user);
@@ -83,8 +84,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.info("load user by user email {}", email);
+    public UserDetails loadUserByUsername(@NotNull @NotBlank String email) throws UsernameNotFoundException {
+        log.debug("load user by user email {}", email);
         User user = repository.findByEmail(email.toLowerCase());
         if (user == null) {
             throw new UsernameNotFoundException("User " + email + " is not found");
@@ -93,7 +94,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private User prepareAndSave(User user) {
-        log.info("prepare and save {}", user);
+        log.debug("prepare and save {}", user);
         String password = user.getPassword();
         user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
         user.setEmail(user.getEmail().toLowerCase());
