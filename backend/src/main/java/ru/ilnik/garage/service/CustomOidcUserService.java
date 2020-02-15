@@ -33,7 +33,7 @@ public class CustomOidcUserService extends OidcUserService {
             user.setOauthClientId((String) attributes.get("sub"));
             user.setPassword(generateRandomPass());
             user.setEmail(oidcUser.getEmail());
-            user.setFirstName(oidcUser.getName());
+            user.setFirstName(oidcUser.getGivenName());
             user.setLastName(oidcUser.getFamilyName());
             user.setLastLoginDate(LocalDateTime.now());
             user.setPhone(oidcUser.getPhoneNumber());

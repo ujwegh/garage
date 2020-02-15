@@ -157,6 +157,8 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator.version}</version>
         </dependency>
+
+        <!-- webjars -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
@@ -167,28 +169,33 @@
             <artifactId>jquery</artifactId>
             <version>3.4.1</version>
         </dependency>
-
-
-        <!-- GrapgQl -->
         <dependency>
-            <groupId>com.graphql-java</groupId>
+            <groupId>org.webjars</groupId>
+            <artifactId>react</artifactId>
+            <version>16.5.2</version>
+        </dependency>
+
+
+        <!-- GraphQl -->
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphql-java-tools</artifactId>
-            <version>${graphql-java-tools.version}</version>
+            <version>5.7.1</version>
         </dependency>
         <dependency>
-            <groupId>com.graphql-java</groupId>
+            <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphiql-spring-boot-starter</artifactId>
-            <version>${graphql-spring-boot-starter.version}</version>
+            <version>6.0.1</version>
         </dependency>
         <dependency>
-            <groupId>com.graphql-java</groupId>
+            <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphql-spring-boot-starter</artifactId>
-            <version>${graphql-spring-boot-starter.version}</version>
+            <version>6.0.1</version>
         </dependency>
         <dependency>
-            <groupId>com.graphql-java</groupId>
+            <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphql-spring-boot-starter-test</artifactId>
-            <version>${graphql-spring-boot-starter.version}</version>
+            <version>6.0.1</version>
             <scope>test</scope>
         </dependency>
 

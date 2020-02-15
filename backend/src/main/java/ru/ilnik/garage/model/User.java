@@ -59,4 +59,20 @@ public class User extends BaseEntity {
         this.password = password;
         this.roles = new HashSet<>(Collections.singletonList(role));
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender=" + gender +
+                ", phone='" + phone + '\'' +
+                ", roles=" + roles +
+                ", imageUuid='" + imageUuid + '\'' +
+                ", enabled=" + enabled +
+                ", lastLoginDate=" + lastLoginDate +
+                ", oauthClientId='" + oauthClientId + '\'' +
+                '}';
+    }
 }
