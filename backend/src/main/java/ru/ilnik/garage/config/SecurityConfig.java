@@ -72,6 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated()
+                .and().formLogin()
                 .and()
                 .oauth2Login()
                 .userInfoEndpoint()
@@ -80,7 +81,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(successHandler)
                 .and()
                 .httpBasic()
-                .and().logout().logoutUrl("/logout")
+                .and()
+                    .logout()
+                    .logoutUrl("/logout")
+                    .deleteCookies("JSESSIONID")
                 .and()
                 .csrf().disable();
     }
