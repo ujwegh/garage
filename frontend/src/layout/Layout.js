@@ -4,7 +4,7 @@ import React from "react";
 // import {Col, Container, Row} from "react-bootstrap";
 // import SideMenu from "../components/SideMenu";
 // import useGetAllTable from "../hooks/useGetAllTable";
-
+import Login from "../pages/Login";
 const Layout = ({children}) => {
     // const isOnline = useGetAllTable();
     return (
@@ -17,7 +17,7 @@ const Layout = ({children}) => {
             {/*        <Col>{isOnline}</Col>*/}
             {/*    </Row>*/}
             {/*</Container>*/}
-            <h1> ХУЙ</h1>
+            <Login/>
         </>
     )
 };
