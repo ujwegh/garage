@@ -9,9 +9,10 @@ type Query {
     users: [User]
 }
 type Mutation {
-#    register(userName: String!, password: String!, role: Role!): String
+    #    register(userName: String!, password: String!, role: Role!): String
     update(user: UserDto!): String
     enableUser(id: ID!, enable: Boolean!): String
+    delete(id: ID!): String
 }
 
 type Book {

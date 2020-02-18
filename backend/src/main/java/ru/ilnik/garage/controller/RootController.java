@@ -20,9 +20,9 @@ public class RootController {
         return "main";
     }
 
-    @GetMapping("/auth/signup")
-    public String login() {
-        return "custom-login";
+    @GetMapping("/registration")
+    public String register() {
+        return "register";
     }
 
     @Secured("ROLE_ADMIN")
