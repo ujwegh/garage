@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Component;
+import ru.ilnik.garage.controller.dto.UserRegistrationDto;
 import ru.ilnik.garage.model.User;
 import ru.ilnik.garage.service.UserService;
 import ru.ilnik.garage.util.UserValidator;
-
-import java.util.List;
 
 @Slf4j
 @Component
@@ -25,6 +24,13 @@ public class GraphQLUserMutations implements GraphQLMutationResolver {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.userValidator = userValidator;
+    }
+
+    public void register(UserRegistrationDto dto) {
+        log.info("Register new user: {}", dto);
+
+
+
     }
 
     @Secured({"ROLE_ADMIN, ROLE_USER", "ROLE_CLIENT", "ROLE_MANAGER"})

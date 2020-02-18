@@ -24,7 +24,7 @@ import static ru.ilnik.garage.util.ValidationUtil.checkNotFoundWithId;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
-    private final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
+    private final Sort SORT_EMAIL = Sort.by(Sort.Direction.ASC, "email");
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<User> getAll() {
         log.debug("Get all users");
-        return repository.findAll(SORT_NAME_EMAIL);
+        return repository.findAll(SORT_EMAIL);
     }
 
     @Override
