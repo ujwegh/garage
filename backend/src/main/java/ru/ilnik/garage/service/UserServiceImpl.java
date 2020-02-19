@@ -9,10 +9,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import ru.ilnik.garage.model.User;
 import ru.ilnik.garage.repository.UserRepository;
-import ru.ilnik.garage.security.AuthorizedUser;
+import ru.ilnik.garage.util.EntityMapper;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getByEmail(@NotNull String email) {
         log.debug("Get user by email {}", email);
-        return checkNotFound(repository.findByEmail(email), "email=" + email);
+        return checkNotFound(repository.findByEmail(email).orElse(null), "email=" + email);
     }
 
     @Override
@@ -84,13 +85,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(@NotNull @NotBlank String email) throws UsernameNotFoundException {
         log.debug("load user by user email {}", email);
-        User user = repository.findByEmail(email.toLowerCase());
-        if (user == null) {
-            throw new UsernameNotFoundException("User " + email + " is not found");
-        }
-        return new AuthorizedUser(user);
+        User user = repository.findByEmail(email.toLowerCase())
+                .orElseThrow(() -> new UsernameNotFoundException("User " + email + " is not found"));
+        return EntityMapper.create(user);
+    }
+
+    @Transactional
+    public UserDetails loadUserById(Long id) {
+        User user = repository.findById(id)
+                .orElseThrow( () -> new UsernameNotFoundException("User with id" + id + " is not found"));
+        return EntityMapper.create(user);
     }
 
     private User prepareAndSave(User user) {
@@ -100,6 +107,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setEmail(user.getEmail().toLowerCase());
         return repository.save(user);
     }
-
-
 }
