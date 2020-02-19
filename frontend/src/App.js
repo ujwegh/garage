@@ -1,43 +1,36 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 import {Route, Switch} from 'react-router-dom';
 
 import Layout from "./layout/Layout";
-// import Home from "./pages/Home";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 // import Lk from "./pages/Lk";
 // import Tables from "./pages/Tables";
 
 
-const App = () => (
+const App = () => {
+    const [id, setId] = useState(null);
 
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
+    useEffect(() => {
+        setId('хуууййй')
+    },[])
 
-    <Layout>
-        <Switch>
-            {/*<Route path='/tables' component={Tables}/>*/}
-            {/*<Route path='/lk' component={Lk}/>*/}
-            <Route path='/' exact component={Login}/>
-        </Switch>
-    </Layout>
-
-);
+    return (
+        <Layout>
+            {id
+                ?(<Switch>
+                    <Route path='/' exact component={Login}/>
+                    <Route path='/lk' component={Home}/>
+                </Switch>)
+                :(<Switch>
+                    <Route path='/' exact component={Login}/>
+                </Switch>)
+            }
+        </Layout>
+    )
+}
 
 export default App;
