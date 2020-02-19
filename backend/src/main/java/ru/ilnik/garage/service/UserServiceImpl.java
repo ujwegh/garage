@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(@NotNull @NotBlank String email) throws UsernameNotFoundException {
-        log.debug("load user by user email {}", email);
+        log.info("Load user by user email {}", email);
         User user = repository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UsernameNotFoundException("User " + email + " is not found"));
         return EntityMapper.create(user);
@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Transactional
     public UserDetails loadUserById(Long id) {
+        log.info("Load user by user id {}", id);
         User user = repository.findById(id)
                 .orElseThrow( () -> new UsernameNotFoundException("User with id" + id + " is not found"));
         return EntityMapper.create(user);

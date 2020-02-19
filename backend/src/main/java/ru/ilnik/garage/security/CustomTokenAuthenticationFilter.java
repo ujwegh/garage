@@ -19,7 +19,8 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class TokenAuthenticationFilter extends OncePerRequestFilter {
+public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
+
     @Autowired
     private TokenProvider tokenProvider;
     @Autowired

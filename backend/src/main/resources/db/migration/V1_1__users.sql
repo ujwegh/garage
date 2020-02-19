@@ -16,9 +16,10 @@ create table users
     last_name       varchar(255),
     gender          varchar(20),
     phone           varchar(50),
-    image_uuid      varchar(255),
+    image_url      varchar(255),
     enabled         boolean default true not null,
     oauth_client_id varchar(255) unique,
+    provider        varchar(20),
     primary key (id)
 );
 
@@ -27,11 +28,11 @@ alter table user_roles
 
 insert into users
 values (1, now(), null, null, 'admin@gmail.com', '$2y$12$qn9/9CJAoRefjK/wu6S.jOXp.EYNXnw0A3EYAVzUPwD6Iz7QBtz1m',
-        'admin', 'admin', 'MALE', '+7-777-888-9900', null, true),
+        'admin', 'admin', 'MALE', '+7-777-888-9900', null, true, null, 'LOCAL'),
        (2, now(), null, null, 'user@gmail.com', '$2y$12$qn9/9CJAoRefjK/wu6S.jOXp.EYNXnw0A3EYAVzUPwD6Iz7QBtz1m', 'user',
-        'user', 'FEMALE', '+8-555-333-1234', null, true),
+        'user', 'FEMALE', '+8-555-333-1234', null, true, null, 'LOCAL'),
        (3, now(), null, null, 'manager@gmail.com', '$2y$12$qn9/9CJAoRefjK/wu6S.jOXp.EYNXnw0A3EYAVzUPwD6Iz7QBtz1m',
-        'manager', 'manager', 'CUSTOM', '+8-800-555-3535', null, true);
+        'manager', 'manager', 'CUSTOM', '+8-800-555-3535', null, true, null, 'LOCAL');
 
 INSERT INTO USER_ROLES (role, user_id)
 VALUES ('ROLE_ADMIN', 1),

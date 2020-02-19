@@ -6,18 +6,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import ru.ilnik.garage.service.CustomOidcUserService;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.ilnik.garage.security.RestAuthenticationEntryPoint;
+import ru.ilnik.garage.security.CustomTokenAuthenticationFilter;
+import ru.ilnik.garage.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import ru.ilnik.garage.security.oauth2.OAuth2AuthenticationFailureHandler;
+import ru.ilnik.garage.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import ru.ilnik.garage.service.CustomOAuth2UserService;
 import ru.ilnik.garage.service.UserServiceImpl;
 
 @Configuration
@@ -31,7 +37,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserServiceImpl userService;
 
     @Autowired
-    private CustomOidcUserService oidcUserService;
+    private CustomOAuth2UserService customOAuth2UserService;
+
+    @Autowired
+    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    @Autowired
+    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
+    @Autowired
+    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
+    @Autowired
+    private CustomTokenAuthenticationFilter customTokenAuthenticationFilter;
+
+    @Bean
+    public CustomTokenAuthenticationFilter tokenAuthenticationFilter() {
+        return customTokenAuthenticationFilter;
+    }
+
+    @Bean
+    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+        return new HttpCookieOAuth2AuthorizationRequestRepository();
+    }
 
     @Bean
     public PasswordEncoder encoder() {
@@ -45,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    @Bean
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
@@ -56,38 +84,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         successHandler.setTargetUrlParameter("redirectTo");
         successHandler.setDefaultTargetUrl("/");
 
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/registration**",
-                        "/webjars/**", "/js/**",
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .logout().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .and()
+                .authorizeRequests()
+                .antMatchers("/webjars/**", "/js/**",
                         "/css/**", "/img/**",
                         "/images/**", "/resources/**",
                         "/static/**", "/vendor/**",
                         "/fonts/**", "/assets/**",
                         "/subscriptions", "/index*",
-                        "/*.js", "/*.json", "/*.ico").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/register").permitAll()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        "/*.js", "/*.json", "/*.ico",
+                        "/auth/**", "/oauth2/**", "/", "/error").permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin().and()
+                .and()
                 .oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/oauth2/authorize")
+                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/oauth2/callback/*")
+                .and()
                 .userInfoEndpoint()
-                .oidcUserService(oidcUserService)
+                .userService(customOAuth2UserService)
                 .and()
-                .successHandler(successHandler)
-                .and()
-                .httpBasic()
-                .and()
-                    .logout()
-                    .logoutUrl("/logout")
-                    .deleteCookies("JSESSIONID")
-                .and()
-                .csrf().disable();
-    }
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
 
-    @Bean
-    public AuthorizationRequestRepository customAuthorizationRequestRepository() {
-        return new HttpSessionOAuth2AuthorizationRequestRepository();
+        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
