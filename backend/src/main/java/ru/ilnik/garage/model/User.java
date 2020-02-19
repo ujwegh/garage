@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
+import ru.ilnik.garage.model.enums.AuthProvider;
 import ru.ilnik.garage.model.enums.Gender;
 import ru.ilnik.garage.model.enums.Role;
 
@@ -42,13 +43,17 @@ public class User extends BaseEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    private String imageUuid;
+    private String imageUrl;
 
     private boolean enabled = true;
 
     private LocalDateTime lastLoginDate;
 
     private String oauthClientId;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
@@ -69,7 +74,7 @@ public class User extends BaseEntity {
                 ", gender=" + gender +
                 ", phone='" + phone + '\'' +
                 ", roles=" + roles +
-                ", imageUuid='" + imageUuid + '\'' +
+                ", imageUuid='" + imageUrl + '\'' +
                 ", enabled=" + enabled +
                 ", lastLoginDate=" + lastLoginDate +
                 ", oauthClientId='" + oauthClientId + '\'' +
