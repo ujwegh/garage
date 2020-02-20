@@ -4,28 +4,19 @@ schema {
 }
 
 type Query {
-    bookById(id: ID): Book
-    allBooks: [Book]
     users: [User]
 }
 type Mutation {
-    #    register(userName: String!, password: String!, role: Role!): String
+    signIn(loginDto: UserLoginDto!): AuthResponse
+    signUp(registrationDto: UserRegitrationDto!): String
     update(user: UserDto!): String
     enableUser(id: ID!, enable: Boolean!): String
     delete(id: ID!): String
 }
 
-type Book {
-    id: ID
-    name: String
-    pageCount: Int
-    author: Author
-}
-
-type Author {
-    id: ID
-    firstName: String
-    lastName: String
+type AuthResponse{
+    accessToken: String
+    tokenType: String
 }
 
 enum Role {
@@ -39,10 +30,9 @@ enum Gender{
     CUSTOM
 }
 
-type UserRegitrationDto {
-    userName: String
-    password: String
-    role: Role
+input UserRegitrationDto {
+    email: String!
+    password: String!
 }
 
 type User {
@@ -66,4 +56,9 @@ input UserDto{
     lastName: String
     gender: Gender
     phone: String
+}
+
+input UserLoginDto{
+    email: String!
+    password: String!
 }

@@ -3,13 +3,24 @@ package ru.ilnik.garage.controller;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ru.ilnik.garage.controller.dto.AuthResponse;
+import ru.ilnik.garage.controller.dto.UserLoginDto;
 import ru.ilnik.garage.controller.dto.UserRegistrationDto;
 import ru.ilnik.garage.model.User;
+import ru.ilnik.garage.model.enums.AuthProvider;
+import ru.ilnik.garage.security.TokenProvider;
 import ru.ilnik.garage.service.UserService;
-import ru.ilnik.garage.util.UserValidator;
+import ru.ilnik.garage.util.exception.BadRequestException;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Component
@@ -17,20 +28,41 @@ public class GraphQLUserMutations implements GraphQLMutationResolver {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private final UserValidator userValidator;
+    private final TokenProvider tokenProvider;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public GraphQLUserMutations(UserService userService, AuthenticationManager authenticationManager, UserValidator userValidator) {
+    public GraphQLUserMutations(UserService userService, AuthenticationManager authenticationManager, TokenProvider tokenProvider, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
-        this.userValidator = userValidator;
+        this.tokenProvider = tokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public void register(UserRegistrationDto dto) {
-        log.info("Register new user: {}", dto);
+    @Secured("ROLE_ANONYMOUS")
+    public AuthResponse signIn(@Valid UserLoginDto loginDto) {
+        log.debug("Login: {}", loginDto);
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = tokenProvider.createToken(authentication);
+        return new AuthResponse(token);
+    }
 
-
+    @Secured("ROLE_ANONYMOUS")
+    public void signUp(@Valid UserRegistrationDto registrationDto) {
+        log.info("Register new user: {}", registrationDto);
+        if (userService.isExist(registrationDto.getEmail())) {
+            throw new BadRequestException("Email address already in use.");
+        }
+        User user = new User();
+        user.setEmail(registrationDto.getEmail());
+        user.setPassword(registrationDto.getPassword());
+        user.setProvider(AuthProvider.LOCAL);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User result = userService.create(user);
     }
 
     @Secured({"ROLE_ADMIN, ROLE_USER", "ROLE_CLIENT", "ROLE_MANAGER"})

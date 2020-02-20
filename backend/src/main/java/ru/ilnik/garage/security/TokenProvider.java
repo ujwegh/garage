@@ -38,8 +38,6 @@ public class TokenProvider {
     }
 
     public boolean validateToken(String authToken) {
-
-        System.out.println(authToken);
         try {
             Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
             return true;

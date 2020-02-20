@@ -102,7 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/fonts/**", "/assets/**",
                         "/subscriptions", "/index*",
                         "/*.js", "/*.json", "/*.ico",
-                        "/auth/**", "/oauth2/**", "/", "/error").permitAll()
+                        "/auth/**", "/oauth2/**", "/", "/error", "/graphql").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
