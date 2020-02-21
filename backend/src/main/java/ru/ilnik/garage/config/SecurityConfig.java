@@ -1,10 +1,8 @@
 package ru.ilnik.garage.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.ilnik.garage.security.RestAuthenticationEntryPoint;
 import ru.ilnik.garage.security.CustomTokenAuthenticationFilter;
 import ru.ilnik.garage.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import ru.ilnik.garage.security.oauth2.OAuth2AuthenticationFailureHandler;
@@ -91,9 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .logout().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-                .and()
                 .authorizeRequests()
                 .antMatchers("/webjars/**", "/js/**",
                         "/css/**", "/img/**",

@@ -40,7 +40,7 @@ spring:
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
 
 
-logging.level.org.springframework.security: debug
+logging.level.org.springframework.security: info
 
 management:
   endpoints:
@@ -53,6 +53,7 @@ graphql:
     mapping: /graphql
     enabled: true
     corsEnabled: true
+    exception-handlers-enabled: true
 
 logging:
   file:
