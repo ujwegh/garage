@@ -8,7 +8,7 @@ type Query {
 }
 type Mutation {
     signIn(loginDto: UserLoginDto!): AuthResponse
-    signUp(registrationDto: UserRegitrationDto!): String
+    signUp(registrationDto: UserRegitrationDto!): AuthResponse
     update(user: UserDto!): String
     enableUser(id: ID!, enable: Boolean!): String
     delete(id: ID!): String
@@ -33,6 +33,7 @@ enum Gender{
 input UserRegitrationDto {
     email: String!
     password: String!
+    role: Role!
 }
 
 type User {

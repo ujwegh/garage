@@ -1,6 +1,19 @@
 spring:
   application:
     name: Garage
+  profiles:
+    active: dev
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 564603883747-jcenartmeh82a2vkbga46gnh4fhir2ns.apps.googleusercontent.com
+            client-secret: JOCos0cl_IayylbRRmRGUYmz
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+---
+spring:
+  profiles: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/garage
     username: postgres
@@ -11,36 +24,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
-#  boot:
-#    admin:
-#      client:
-#        #login to admin-server:
-#        url: http://localhost:8080
-#        username: admin
-#        password: admin123
-#        #login to client:
-#        instance:
-#          metadata:
-#            user:
-#              name: admin
-#              password: admin123
-  #��������� ������������ - ���� ���
-#  security:
-#    user:
-#      name: admin
-#      password: admin123
 
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 564603883747-jcenartmeh82a2vkbga46gnh4fhir2ns.apps.googleusercontent.com
-            client-secret: JOCos0cl_IayylbRRmRGUYmz
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
-
-
-logging.level.org.springframework.security: info
+logging.level.org.springframework.security: debug
 
 management:
   endpoints:
@@ -62,7 +47,7 @@ logging:
 app:
   auth:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
-    tokenExpirationMsec: 864000000
+    tokenExpirationMsec: 10000
   oauth2:
     # After successfully authenticating with the OAuth2 Provider,
     # we'll be generating an auth token for the user and sending the token to the
@@ -70,3 +55,29 @@ app:
     # We're not using cookies because they won't work well in mobile clients.
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
+#
+altair:
+  mapping: /altair
+  endpoint:
+    graphql: /graphql
+    subscriptions: /subscriptions
+  subscriptions:
+    timeout: 30
+    reconnect: false
+  static:
+    basePath: /localhost
+  enabled: true
+  pageTitle: Altair
+  cdn:
+    enabled: true
+    version: 2.1.7
+  props:
+    resources:
+      defaultQuery: graphql/schema.graphqls
+#      variables: variables.graphql
+  headers:
+    Authorization: "Bearer <your-token>"
+
+---
+spring:
+  profiles: prod

@@ -24,6 +24,7 @@ import static ru.ilnik.garage.util.ValidationUtil.checkNotFoundWithId;
 
 @Slf4j
 @Service
+@Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final Sort SORT_EMAIL = Sort.by(Sort.Direction.ASC, "email");
     private final UserRepository repository;
@@ -68,7 +69,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void update(@NotNull User user) {
         log.debug("update user by user {}", user);
-        prepareAndSave(user);
+        User existed = get(user.getId());
+        existed.setEmail(user.getEmail());
+        existed.setFirstName(user.getFirstName());
+        existed.setLastName(user.getLastName());
+        existed.setGender(user.getGender());
+        existed.setRoles(user.getRoles());
+        existed.setPhone(user.getPhone());
+        repository.save(user);
     }
 
     @Override
@@ -90,7 +98,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Load user by user email {}", email);
         User user = repository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UsernameNotFoundException("User " + email + " is not found"));
-        return EntityMapper.create(user);
+        return EntityMapper.toUserPrincipal(user);
     }
 
     @Transactional
@@ -98,7 +106,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Load user by user id {}", id);
         User user = repository.findById(id)
                 .orElseThrow( () -> new UsernameNotFoundException("User with id" + id + " is not found"));
-        return EntityMapper.create(user);
+        return EntityMapper.toUserPrincipal(user);
     }
 
     private User prepareAndSave(User user) {

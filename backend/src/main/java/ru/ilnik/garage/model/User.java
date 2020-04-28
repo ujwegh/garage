@@ -53,7 +53,7 @@ public class User extends BaseEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
+    private AuthProvider provider = AuthProvider.LOCAL;
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
