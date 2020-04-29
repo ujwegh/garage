@@ -1,9 +1,9 @@
 package ru.ilnik.garage.security.oauth2;
 
-import ru.ilnik.garage.model.GoogleOAuth2UserInfo;
-import ru.ilnik.garage.model.OAuth2UserInfo;
-import ru.ilnik.garage.model.VkOAuth2UserInfo;
-import ru.ilnik.garage.model.enums.AuthProvider;
+import ru.ilnik.garage.model.oauth.GoogleOAuth2UserInfo;
+import ru.ilnik.garage.model.oauth.OAuth2UserInfo;
+import ru.ilnik.garage.model.oauth.VkOAuth2UserInfo;
+import ru.ilnik.garage.model.oauth.AuthProvider;
 import ru.ilnik.garage.util.exception.OAuth2AuthenticationProcessingException;
 
 import java.util.Map;

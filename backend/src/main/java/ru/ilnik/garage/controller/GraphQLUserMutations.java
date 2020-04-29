@@ -14,7 +14,7 @@ import ru.ilnik.garage.controller.dto.AuthResponse;
 import ru.ilnik.garage.controller.dto.UserLoginDto;
 import ru.ilnik.garage.controller.dto.UserRegistrationDto;
 import ru.ilnik.garage.model.User;
-import ru.ilnik.garage.model.enums.AuthProvider;
+import ru.ilnik.garage.model.oauth.AuthProvider;
 import ru.ilnik.garage.security.TokenProvider;
 import ru.ilnik.garage.security.UserPrincipal;
 import ru.ilnik.garage.service.UserService;
@@ -76,7 +76,7 @@ public class GraphQLUserMutations implements GraphQLMutationResolver {
         user.setProvider(AuthProvider.LOCAL);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton(registrationDto.getRole()));
-        User result = userService.create(user);
+        userService.create(user);
         UserLoginDto loginDto = toUserLoginDto(registrationDto);
         return signIn(loginDto);
     }

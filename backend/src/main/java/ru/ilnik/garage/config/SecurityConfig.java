@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -42,9 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-
-    @Autowired
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Autowired
     private CustomTokenAuthenticationFilter customTokenAuthenticationFilter;
@@ -91,14 +87,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().disable()
                 .authorizeRequests()
                 .antMatchers("/webjars/**", "/js/**",
-                        "/css/**", "/img/**","/error",
+                        "/css/**", "/img/**", "/error",
                         "/images/**", "/resources/**",
                         "/static/**", "/vendor/**",
                         "/fonts/**", "/assets/**",
                         "/subscriptions", "/index*",
                         "/*.js", "/*.json", "/*.ico",
                         "/auth/**", "/oauth2/**", "/", "/error",
-                        "/graphql","/altair", "/altair/**").permitAll()
+                        "/graphql", "/altair", "/altair/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()

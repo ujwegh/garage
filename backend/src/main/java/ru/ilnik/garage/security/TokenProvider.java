@@ -30,18 +30,6 @@ public class TokenProvider {
                 .compact();
     }
 
-    public String createOauthToken(Authentication authentication) {
-        DefaultOidcUser userPrincipal = (DefaultOidcUser) authentication.getPrincipal();
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
-        return Jwts.builder()
-                .setSubject(userPrincipal.getSubject())
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
-                .compact();
-    }
-
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(appProperties.getAuth().getTokenSecret())

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
-import ru.ilnik.garage.model.enums.AuthProvider;
+import ru.ilnik.garage.model.oauth.AuthProvider;
 import ru.ilnik.garage.model.enums.Gender;
 import ru.ilnik.garage.model.enums.Role;
 

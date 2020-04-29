@@ -1,4 +1,4 @@
-package ru.ilnik.garage.model.enums;
+package ru.ilnik.garage.model.oauth;
 
 public enum AuthProvider {
     GOOGLE,

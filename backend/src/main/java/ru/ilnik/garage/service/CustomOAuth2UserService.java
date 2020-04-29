@@ -1,5 +1,6 @@
 package ru.ilnik.garage.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -9,16 +10,20 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import ru.ilnik.garage.model.OAuth2UserInfo;
+import ru.ilnik.garage.model.enums.Role;
+import ru.ilnik.garage.model.oauth.OAuth2UserInfo;
 import ru.ilnik.garage.model.User;
-import ru.ilnik.garage.model.enums.AuthProvider;
+import ru.ilnik.garage.model.oauth.AuthProvider;
 import ru.ilnik.garage.repository.UserRepository;
 import ru.ilnik.garage.security.oauth2.OAuth2UserInfoFactory;
 import ru.ilnik.garage.util.EntityMapper;
 import ru.ilnik.garage.util.exception.OAuth2AuthenticationProcessingException;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Autowired
@@ -47,7 +52,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
-            if (!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
+            if (!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()))) {
                 throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
                         user.getProvider() + " account. Please use your " + user.getProvider() +
                         " account to login.");
@@ -61,11 +66,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
-        user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
+        user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()));
         user.setOauthClientId(oAuth2UserInfo.getId());
         user.setFirstName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setPassword("");
+        user.setRoles(Collections.singleton(Role.ROLE_CLIENT));
+        user.setLastLoginDate(LocalDateTime.now());
         return userRepository.save(user);
     }
 
