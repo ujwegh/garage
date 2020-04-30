@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+      ports:
+        - "8080:8080"
+      restart: always
+      depends_on:
+        - db
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/garage
+        SPRING_DATASOURCE_USERNAME: postgres
+        SPRING_DATASOURCE_PASSWORD: postgres
+      networks:
+        - backend-network
+        - frontend-network
+
+  db:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: garage
+    volumes:
+      - db-data: /var/lib/postgres
+    networks:
+      - backend-network
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_BASE_URL: http://127.0.0.1:8080/api
+    ports:
+      - "9090:80"
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - frontend-network
+
+# add spring-cloud-config-server
+
+volumes:
+  db-data:
+
+networks:
+  backend-network:
+  frontend-network:
