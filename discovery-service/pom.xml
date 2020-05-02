@@ -18,17 +18,17 @@
             <version>${spring.cloud.eureka}</version>
         </dependency>
 
-        <!-- Spring Boot Admin -->
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-server</artifactId>
-            <version>${spring.boot.admin}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>${spring.boot.admin}</version>
-        </dependency>
+<!--        &lt;!&ndash; Spring Boot Admin &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>de.codecentric</groupId>-->
+<!--            <artifactId>spring-boot-admin-starter-server</artifactId>-->
+<!--            <version>${spring.boot.admin}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>de.codecentric</groupId>-->
+<!--            <artifactId>spring-boot-admin-starter-client</artifactId>-->
+<!--            <version>${spring.boot.admin}</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
