@@ -1,11 +1,10 @@
 spring:
   application:
     name: content-service
-
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka/
+      defaultZone: http://localhost:8761/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
@@ -13,3 +12,6 @@ eureka:
 ribbon:
   eureka:
     enabled: true
+
+server:
+  port: 8081
