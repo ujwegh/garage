@@ -23,13 +23,17 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
   instance:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
+    hostname: localhost
 
 ribbon:
   eureka:
     enabled: true
+server:
+  port: 8080
 
 ---
 spring:
@@ -77,7 +81,7 @@ app:
 altair:
   mapping: /altair
   endpoint:
-    graphql: /graphql
+    graphql: /users
     subscriptions: /subscriptions
   subscriptions:
     timeout: 30

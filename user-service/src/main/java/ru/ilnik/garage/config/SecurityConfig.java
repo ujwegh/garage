@@ -94,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/subscriptions", "/index*",
                         "/*.js", "/*.json", "/*.ico",
                         "/auth/**", "/oauth2/**", "/", "/error",
-                        "/graphql", "/altair", "/altair/**").permitAll()
+                        "/users", "/altair", "/altair/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
@@ -115,7 +115,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web
                 .ignoring()
                 .antMatchers("/resources/**");
