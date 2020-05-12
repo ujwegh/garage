@@ -1,6 +1,6 @@
-package ru.ilnik.garage.util.exception;
+package ru.ilnik.garage.exceptions;
 
-public class NotFoundException extends ApplicationException{
+public class NotFoundException extends ApplicationException {
     public static final String NOT_FOUND_EXCEPTION = "exception.common.notFound";
 
     //  http://stackoverflow.com/a/22358422/548473

@@ -1,14 +1,16 @@
 package ru.ilnik.garage.util;
 
+
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import ru.ilnik.garage.util.exception.ErrorType;
-import ru.ilnik.garage.util.exception.NotFoundException;
+import ru.ilnik.garage.exceptions.BadRequestException;
+import ru.ilnik.garage.exceptions.ErrorType;
+import ru.ilnik.garage.exceptions.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.*;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ValidationUtil {

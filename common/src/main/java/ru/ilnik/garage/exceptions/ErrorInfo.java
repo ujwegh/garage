@@ -1,4 +1,4 @@
-package ru.ilnik.garage.util.exception;
+package ru.ilnik.garage.exceptions;
 
 public class ErrorInfo {
     private final String url;

@@ -17,7 +17,7 @@ spring:
 
 logging:
   file:
-    name: garage.log
+    name: user-service.log
 
 eureka:
   client:

@@ -30,6 +30,8 @@
         <module>content-service</module>
         <module>gateway-service</module>
         <module>discovery-service</module>
+        <module>garage-service</module>
+        <module>common</module>
     </modules>
 
     <repositories>

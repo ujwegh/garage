@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: garage-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/garage-service
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+  flyway:
+    enabled: false
+logging:
+  file:
+    name: garage-service.log
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+    hostname: localhost
+
+ribbon:
+  eureka:
+    enabled: true
+server:
+  port: 8081
+

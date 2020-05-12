@@ -1,4 +1,4 @@
-package ru.ilnik.garage.util.exception;
+package ru.ilnik.garage.exceptions;
 
 import java.util.Arrays;
 

@@ -66,9 +66,6 @@ public class User extends BaseEntity {
     @Column(name = "provider")
     private AuthProvider provider = AuthProvider.LOCAL;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Garage garage;
-
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }

@@ -13,5 +13,9 @@ ribbon:
   eureka:
     enabled: true
 
+logging:
+  file:
+    name: content-service.log
+
 server:
   port: 8081

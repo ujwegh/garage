@@ -6,9 +6,9 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.ilnik.garage.config.AppProperties;
+import ru.ilnik.garage.exceptions.BadRequestException;
 import ru.ilnik.garage.security.TokenProvider;
 import ru.ilnik.garage.util.CookieUtils;
-import ru.ilnik.garage.util.exception.BadRequestException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;

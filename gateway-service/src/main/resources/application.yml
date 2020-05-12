@@ -18,6 +18,10 @@ zuul:
       path: /contents/**
       serviceId: content-service
       stripPrefix: false
+    garage-service:
+      path: /garages/**
+      serviceId: garage-service
+      stripPrefix: false
 
 ribbon:
   eureka:
@@ -31,3 +35,7 @@ eureka:
     fetch-registry: true
   instance:
     hostname: localhost
+
+logging:
+  file:
+    name: gateway-service.log

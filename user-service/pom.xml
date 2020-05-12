@@ -35,6 +35,12 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>ru.ilnik</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -201,17 +207,6 @@
 
 
         <!-- GraphQl -->
-<!--        <dependency>-->
-<!--            <groupId>com.graphql-java-kickstart</groupId>-->
-<!--            <artifactId>graphql-java-tools</artifactId>-->
-<!--            <version>5.7.1</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.graphql-java-kickstart</groupId>-->
-<!--            <artifactId>graphiql-spring-boot-starter</artifactId>-->
-<!--            <version>6.0.1</version>-->
-<!--        </dependency>-->
-
         <!-- to embed Altair tool -->
         <dependency>
             <groupId>com.graphql-java-kickstart</groupId>

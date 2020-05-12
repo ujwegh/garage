@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 import ru.ilnik.garage.controller.dto.AuthResponse;
 import ru.ilnik.garage.controller.dto.UserLoginDto;
 import ru.ilnik.garage.controller.dto.UserRegistrationDto;
+import ru.ilnik.garage.exceptions.BadRequestException;
+import ru.ilnik.garage.exceptions.NotFoundException;
 import ru.ilnik.garage.model.User;
 import ru.ilnik.garage.model.oauth.AuthProvider;
 import ru.ilnik.garage.security.TokenProvider;
 import ru.ilnik.garage.security.UserPrincipal;
 import ru.ilnik.garage.service.UserService;
-import ru.ilnik.garage.util.exception.BadRequestException;
-import ru.ilnik.garage.util.exception.NotFoundException;
 
 import javax.validation.Valid;
 
@@ -84,20 +84,25 @@ public class GraphQLUserMutations implements GraphQLMutationResolver {
     @Secured({"ROLE_ADMIN, ROLE_USER", "ROLE_CLIENT", "ROLE_MANAGER"})
     public void update(User user) {
         log.info("Update user: {}", user);
-        if (user.getId() == null) throw new NotFoundException("User id must not be null.");
+        chechUserId(user.getId());
         userService.update(user);
     }
 
     @Secured("ROLE_ADMIN")
     public void enableUser(Long id, Boolean enable) {
+        chechUserId(id);
         log.info(enable ? "enable user with id: {}" : "disable user with id: {}", id);
         userService.enable(id, enable);
     }
 
     @Secured("ROLE_ADMIN")
     public void delete(Long id) {
+        chechUserId(id);
         log.info("Delete user with id: {}", id);
         userService.delete(id);
     }
 
+    private void chechUserId(Long id) {
+        if (id == null) throw new NotFoundException("User id must not be null.");
+    }
 }

@@ -9,3 +9,7 @@ eureka:
     fetchRegistry: false
   server:
     enableSelfPreservation: false
+
+logging:
+  file:
+    name: discovery-service.log
