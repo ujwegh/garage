@@ -47,9 +47,8 @@ class VehicleServiceImplTest {
     @Test
     void update() {
         Vehicle expected = getVehicle();
-        expected.setName("new Name");
-        expected.setType(VehicleType.TRUCK);
-        Vehicle actual = vehicleService.update(expected);
+        VehicleDto vehicleDto = new VehicleDto(expected.getId(), "new Name", VehicleType.TRUCK);
+        Vehicle actual = vehicleService.update(vehicleDto);
         assertNotNull(actual);
         assertEquals(expected, actual);
     }

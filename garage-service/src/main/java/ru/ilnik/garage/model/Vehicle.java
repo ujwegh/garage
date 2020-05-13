@@ -29,7 +29,7 @@ public class Vehicle extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleProperty> properties;
 
     public Vehicle(String name, VehicleType type) {

@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Table(name = "properties")
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class VehicleProperty extends BaseEntity{
 
     @Column(name = "name", nullable = false)

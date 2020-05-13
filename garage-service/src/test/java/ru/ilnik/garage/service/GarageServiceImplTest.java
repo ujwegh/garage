@@ -4,10 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.ilnik.garage.dto.VehicleDto;
 import ru.ilnik.garage.model.Garage;
+import ru.ilnik.garage.model.Vehicle;
+import ru.ilnik.garage.model.enums.VehicleType;
 import ru.ilnik.garage.repository.GarageRepository;
+import ru.ilnik.garage.repository.VehicleRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,11 +27,17 @@ class GarageServiceImplTest {
     @Autowired
     private GarageRepository repository;
 
-    private static final Garage garage = new Garage(1L, 57.64911, 10.40744);
-
+    @Autowired
+    private VehicleRepository vehicleRepository;
+    private Garage expected;
+    private final List<Vehicle> vehicles = new ArrayList<>();
     @BeforeEach
     void init() {
-        repository.save(garage);
+        vehicles.add(vehicleRepository.save(new Vehicle("truck", VehicleType.TRUCK)));
+        vehicles.add(vehicleRepository.save(new Vehicle("car", VehicleType.CAR)));
+        Garage garage = new Garage(1L, 57.64911, 10.40744);
+        garage.setVehicles(vehicles);
+        expected = repository.save(garage);
     }
 
     @Test
@@ -40,26 +51,26 @@ class GarageServiceImplTest {
 
     @Test
     void getById() {
-        Garage garage = getGarage();
-        Garage actual = garageService.getById(garage.getId());
+        Garage actual = garageService.getById(expected.getId());
         assertNotNull(actual);
-        assertEquals(garage.getId(), actual.getId());
-        assertEquals(garage.getLatitude(), actual.getLatitude());
-        assertEquals(garage.getLongitude(), actual.getLongitude());
-        assertEquals(garage.getUserId(), actual.getUserId());
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getLatitude(), actual.getLatitude());
+        assertEquals(expected.getLongitude(), actual.getLongitude());
+        assertEquals(expected.getUserId(), actual.getUserId());
     }
 
     @Test
     void deleteById() {
-        Garage garage = getGarage();
-        garageService.deleteById(garage.getId());
+        garageService.deleteById(expected.getId());
         assertTrue(repository.findAll().isEmpty());
         assertEquals(0, repository.findAll().size());
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        assertNotNull(vehicles);
+        assertEquals(0, vehicles.size());
     }
 
     @Test
     void update() {
-        Garage expected = getGarage();
         expected.setLongitude(99.99);
         Garage actual = garageService.update(expected);
         assertNotNull(actual);
@@ -72,7 +83,6 @@ class GarageServiceImplTest {
 
     @Test
     void getAllByUserId() {
-        Garage expected = getGarage();
         List<Garage> garages = garageService.getAllByUserId(1L);
         assertNotNull(garages);
         assertTrue(garages.size() > 0);
@@ -84,9 +94,29 @@ class GarageServiceImplTest {
         assertEquals(expected.getUserId(), actual.getUserId());
     }
 
-    private Garage getGarage() {
-        Garage garage = repository.findAll().stream().findFirst().orElse(null);
+    @Test
+    void addVehicle() {
+        VehicleDto vehicleDto = new VehicleDto("aircraft", VehicleType.AIRCRAFT);
+        Garage actual = garageService.addVehicle(expected.getId(), vehicleDto);
+        assertNotNull(actual);
+        assertNotNull(actual.getVehicles());
+        assertEquals(3, actual.getVehicles().size());
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        assertNotNull(vehicles);
+        assertEquals(3, vehicles.size());
+    }
+
+    @Test
+    void deleteVehicle() {
+        Vehicle vehicle = vehicles.stream().findFirst().orElse(null);
+        assertNotNull(vehicle);
+        garageService.deleteVehicle(expected.getId(), vehicle.getId());
+        Garage garage = repository.findById(expected.getId()).orElse(null);
         assertNotNull(garage);
-        return garage;
+        assertEquals(1, garage.getVehicles().size());
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        assertNotNull(vehicles);
+        assertTrue(vehicles.size() > 0);
+        assertEquals(1, vehicles.size());
     }
 }
